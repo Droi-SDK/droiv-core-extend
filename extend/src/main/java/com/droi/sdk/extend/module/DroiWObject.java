@@ -3,13 +3,12 @@ package com.droi.sdk.extend.module;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiObject;
 import com.droi.sdk.core.DroiQuery;
-import com.droi.sdk.core.DroiQueryCallback;
 import com.taobao.weex.annotation.JSMethod;
+import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 
 import org.json.JSONArray;
@@ -24,8 +23,16 @@ import java.util.List;
  */
 
 public class DroiWObject extends WXModule {
+
     @JSMethod(uiThread = false)
-    public void query(String tableName, String whereClause, String options) {
+    public void save() {
+
+    }
+
+    @JSMethod(uiThread = false)
+    public void query(String tableName, String whereClause, String options, JSCallback jsCallback) {
+        Log.i("chenpei","options:"+options);
+        Log.i("chenpei","whereClause:"+whereClause);
         Log.i("chenpei", "enter");
         DroiCondition cond = null;
         DroiQuery.Builder builder = DroiQuery.Builder.newBuilder().query(tableName);
@@ -46,7 +53,7 @@ public class DroiWObject extends WXModule {
         JSONObject optionJSONObject;
         boolean isCount = false;
         try {
-            if (options != null) {
+            if (!TextUtils.isEmpty(options)) {
                 optionJSONObject = new JSONObject(options);
                 isCount = optionJSONObject.optBoolean("count", false);
             }
@@ -54,31 +61,31 @@ public class DroiWObject extends WXModule {
             e.printStackTrace();
         }
         if (isCount) {
-            query.countInBackground(new DroiCallback<Integer>() {
-                @Override
-                public void result(Integer integer, DroiError droiError) {
-                    if (droiError.isOk()) {
-                        // 成功！
-                        Log.i("chenpei", "size:" + integer);
-                    } else {
-                        Log.e("chenpei", "失败" + droiError.toString());
-                    }
-                }
-            });
+            DroiError droiError = new DroiError();
+            int count = query.count(droiError);
+            DroiResult result = new DroiResult();
+            result.Code = droiError.getCode();
+            result.Count = count;
+            jsCallback.invoke(result.toString());
+            if (droiError.isOk()) {
+                Log.i("chenpei", "size:" + count);
+            } else {
+                Log.e("chenpei", "失败" + droiError.toString());
+            }
         } else {
-            query.runQueryInBackground(new DroiQueryCallback<DroiObject>() {
-                @Override
-                public void result(List<DroiObject> list, DroiError droiError) {
-                    if (droiError.isOk()) {
-                        // 成功！
-                        Log.i("chenpei", list.toString());
-                    } else {
-                        Log.e("chenpei", "失败" + droiError.toString());
-                    }
-                }
-            });
+            DroiError droiError = new DroiError();
+            List<DroiObject> list = query.runQuery(droiError);
+            DroiResult result = new DroiResult();
+            result.Code = droiError.getCode();
+            result.ArrayResult = new JSONArray(list);
+            result.Count = list.size();
+            jsCallback.invoke(result.toString());
+            if (droiError.isOk()) {
+                Log.i("chenpei", list.toString());
+            } else {
+                Log.e("chenpei", "失败" + droiError.toString());
+            }
         }
-        // TODO: 2017/9/8 改为同步方法
     }
 
     private DroiCondition parseCondition(JSONObject object) {

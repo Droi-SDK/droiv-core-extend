@@ -35,6 +35,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.droi.sdk:Core:+'
-    compile 'weex-project:weex_sdk:0.13.1'
+    compile 'weex-project:weex_sdk:0.13.1@aar'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
 }
