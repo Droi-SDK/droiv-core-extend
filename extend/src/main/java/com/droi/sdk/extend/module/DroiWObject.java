@@ -27,7 +27,7 @@ public class DroiWObject extends WXModule {
 
     @JSMethod(uiThread = false)
     public void save() {
-
+        // TODO
     }
 
     @JSMethod(uiThread = false)
@@ -67,7 +67,9 @@ public class DroiWObject extends WXModule {
             DroiResult result = new DroiResult();
             result.Code = droiError.getCode();
             result.Count = count;
-            jsCallback.invoke(result.toString());
+            if (jsCallback!=null) {
+                jsCallback.invoke(result.toString());
+            }
             if (droiError.isOk()) {
                 Log.i("chenpei", "size:" + count);
             } else {
@@ -80,7 +82,9 @@ public class DroiWObject extends WXModule {
             result.Code = droiError.getCode();
             result.ArrayResult = Utils.listToJSONArray(list);
             result.Count = list.size();
-            jsCallback.invoke(result.toMap());
+            if (jsCallback!=null) {
+                jsCallback.invoke(result.toMap());
+            }
             if (droiError.isOk()) {
                 Log.i("chenpei", list.toString());
             } else {
@@ -146,7 +150,7 @@ public class DroiWObject extends WXModule {
             int limit = object.optInt("limit", 0);
             builder = builder.limit(limit);
             // order
-            String orderString = object.getString("order");
+            String orderString = object.optString("order");
             String[] orders = orderString.split(",");
             for (String orderName : orders) {
                 if (orderName.startsWith("-")) {

@@ -1,6 +1,5 @@
 package com.droi.sdk.extend.module;
 
-import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCloud;
 import com.taobao.weex.annotation.JSMethod;
@@ -55,6 +54,8 @@ public class DroiWCloud extends WXModule {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        jsCallback.invoke(result);
+        if (jsCallback!=null) {
+            jsCallback.invoke(result.toMap());
+        }
     }
 }

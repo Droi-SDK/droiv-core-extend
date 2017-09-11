@@ -1,5 +1,7 @@
 package com.droi.sdk.extend.module;
 
+import com.droi.sdk.extend.Utils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,9 +13,11 @@ import java.util.Map;
  * Created by chenpei on 2017/9/8.
  */
 
-public class DroiResult extends JSONObject {
+public class DroiResult {
 
     public int Code;
+
+    public String StringResult;
 
     public JSONObject Result;
 
@@ -21,39 +25,26 @@ public class DroiResult extends JSONObject {
 
     public int Count = -1;
 
-    public JSONObject toJSONObject() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("Code", Code);
-            if (Count != -1) {
-                jsonObject.put("Count", Count);
-            }
-            if (Result != null) {
-                jsonObject.put("Result", Result);
-            } else if (ArrayResult != null) {
-                jsonObject.put("Result", ArrayResult);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
-    }
-
-    @Override
-    public String toString() {
-        return toJSONObject().toString();
-    }
-
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("Code", Code);
         if (Count != -1) {
             map.put("Count", Count);
         }
-        if (Result != null) {
-            map.put("Result", Result.toString());
+        if (StringResult != null) {
+            map.put("Result", StringResult);
+        } else if (Result != null) {
+            try {
+                map.put("Result", Utils.toMap(Result));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } else if (ArrayResult != null) {
-            map.put("Result", ArrayResult.toString());
+            try {
+                map.put("Result", Utils.toList(ArrayResult));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return map;
     }
