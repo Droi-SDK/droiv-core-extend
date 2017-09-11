@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by chenpei on 2017/9/8.
  */
@@ -18,22 +21,40 @@ public class DroiResult extends JSONObject {
 
     public int Count = -1;
 
-    @Override
-    public String toString() {
-        JSONObject object = new JSONObject();
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
         try {
-            object.put("Code", Code);
+            jsonObject.put("Code", Code);
             if (Count != -1) {
-                object.put("Count", Count);
+                jsonObject.put("Count", Count);
             }
             if (Result != null) {
-                object.put("Result", Result);
+                jsonObject.put("Result", Result);
             } else if (ArrayResult != null) {
-                object.put("Result", ArrayResult);
+                jsonObject.put("Result", ArrayResult);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return object.toString();
+        return jsonObject;
+    }
+
+    @Override
+    public String toString() {
+        return toJSONObject().toString();
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("Code", Code);
+        if (Count != -1) {
+            map.put("Count", Count);
+        }
+        if (Result != null) {
+            map.put("Result", Result.toString());
+        } else if (ArrayResult != null) {
+            map.put("Result", ArrayResult.toString());
+        }
+        return map;
     }
 }

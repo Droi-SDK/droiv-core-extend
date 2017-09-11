@@ -7,6 +7,7 @@ import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiObject;
 import com.droi.sdk.core.DroiQuery;
+import com.droi.sdk.extend.Utils;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -77,9 +78,9 @@ public class DroiWObject extends WXModule {
             List<DroiObject> list = query.runQuery(droiError);
             DroiResult result = new DroiResult();
             result.Code = droiError.getCode();
-            result.ArrayResult = new JSONArray(list);
+            result.ArrayResult = Utils.listToJSONArray(list);
             result.Count = list.size();
-            jsCallback.invoke(result.toString());
+            jsCallback.invoke(result.toMap());
             if (droiError.isOk()) {
                 Log.i("chenpei", list.toString());
             } else {
