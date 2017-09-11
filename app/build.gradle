@@ -30,6 +30,8 @@ android {
 }
 
 repositories {
+    jcenter()
+    mavenCentral()
     maven { url "https://dl.bintray.com/alibabaweex/maven" }
     maven { url "https://github.com/DroiBaaS/DroiBaaS-SDK-Android/raw/master/" }
 }
@@ -50,6 +52,13 @@ dependencies {
 
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.alibaba:fastjson:1.1.63.android'
+    // dev-tool
+    compile 'com.taobao.android:weex_inspector:0.12.1'
+//    compile 'com.squareup.okhttp:okhttp:3.4.1'
+//    compile 'com.squareup.okhttp:okhttp-ws:3.4.1'
+    compile 'com.squareup.okhttp:okhttp:2.3.0'
+    compile 'com.squareup.okhttp:okhttp-ws:2.3.0'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
 //    compile 'com.facebook.fresco:fresco:1.5.0'
     //compile 'com.facebook.fresco:animated-gif:0.12.0'
 }
