@@ -25,6 +25,7 @@ public class Utils {
                 jsonArray.put(new JSONObject(object.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
+                return null;
             }
         }
         return jsonArray;

@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class DroiWUser extends WXModule {
 
-    DroiUser.OtpType getOtpType(String otpType) {
+    private DroiUser.OtpType getOtpType(String otpType) {
         if (otpType.toUpperCase().equals("PHONE")) {
             return DroiUser.OtpType.PHONE;
         } else {

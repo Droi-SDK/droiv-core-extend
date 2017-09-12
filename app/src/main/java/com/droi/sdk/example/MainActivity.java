@@ -8,18 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
-import com.droi.sdk.extend.module.DroiWObject;
 import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
-import com.taobao.weex.common.WXPerformance;
 import com.taobao.weex.common.WXRenderStrategy;
 import com.taobao.weex.utils.WXFileUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class MainActivity extends Activity implements IWXRenderListener {
 

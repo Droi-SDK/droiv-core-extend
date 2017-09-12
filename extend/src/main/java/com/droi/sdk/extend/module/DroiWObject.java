@@ -7,6 +7,7 @@ import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiObject;
 import com.droi.sdk.core.DroiQuery;
+import com.droi.sdk.core.DroiReferenceObject;
 import com.droi.sdk.extend.Utils;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -26,14 +27,82 @@ import java.util.List;
 public class DroiWObject extends WXModule {
 
     @JSMethod(uiThread = false)
-    public void save() {
-        // TODO
+    public void save(String tableName, String body, JSCallback jsCallback) {
+        DroiResult result = new DroiResult();
+        try {
+            JSONObject object = new JSONObject(body);
+            DroiObject droiObject = fromJson(tableName, object);
+            DroiError droiError = droiObject.save();
+            if (droiError.isOk()) {
+                // TODO
+            } else {
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (jsCallback != null) {
+            jsCallback.invoke(result.toMap());
+        }
+    }
+
+    private static DroiObject fromJson(String tableName, JSONObject json) {
+        DroiObject droiObject = null;
+        try {
+            //String tableName = json.getString("_TableName");
+            droiObject = DroiObject.create(tableName);
+            Iterator<String> keys = json.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Object value = json.get(key);
+                if (value instanceof JSONObject && ((JSONObject) value).has("_DataType")) {
+                    JSONObject jsonObject = (JSONObject) value;
+                    //String dataType = jsonObject.optString("_DataType");
+                    JSONObject object = jsonObject.optJSONObject("_Object");
+                    String myTableName = jsonObject.getString("_TableName");
+                    // TODO
+                    switch (myTableName){
+                        case "_File":
+                            break;
+                        case "_User":
+                            break;
+                        default:
+                            break;
+                    }
+                    DroiObject droiObject1 = fromJson(myTableName, object);
+                    DroiReferenceObject referenceObject = new DroiReferenceObject();
+                    referenceObject.setDroiObject(droiObject1);
+                    value = referenceObject;
+                }
+                droiObject.put(key, value);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return droiObject;
+    }
+
+    @JSMethod(uiThread = false)
+    public void delete(String id, String tableName, JSCallback jsCallback) {
+        DroiCondition condition = DroiCondition.eq("_Id", id);
+        DroiQuery query = DroiQuery.Builder.newBuilder().query(tableName).where(condition).build();
+        DroiError droiError = new DroiError();
+        DroiObject droiObject;
+        DroiResult result = new DroiResult();
+        List<DroiObject> list = query.runQuery(droiError);
+        if (droiError.isOk() && list.size() == 1) {
+            droiObject = list.get(0);
+            droiError = droiObject.delete();
+        }
+        // TODO droiObject 没有查询到
+        result.Code = droiError.getCode();
+        jsCallback.invoke(result.toMap());
     }
 
     @JSMethod(uiThread = false)
     public void query(String tableName, String whereClause, String options, JSCallback jsCallback) {
-        Log.i("chenpei","options:"+options);
-        Log.i("chenpei","whereClause:"+whereClause);
+        Log.i("chenpei", "options:" + options);
+        Log.i("chenpei", "whereClause:" + whereClause);
         Log.i("chenpei", "enter");
         DroiCondition cond = null;
         DroiQuery.Builder builder = DroiQuery.Builder.newBuilder().query(tableName);
@@ -67,7 +136,7 @@ public class DroiWObject extends WXModule {
             DroiResult result = new DroiResult();
             result.Code = droiError.getCode();
             result.Count = count;
-            if (jsCallback!=null) {
+            if (jsCallback != null) {
                 jsCallback.invoke(result.toString());
             }
             if (droiError.isOk()) {
@@ -82,7 +151,7 @@ public class DroiWObject extends WXModule {
             result.Code = droiError.getCode();
             result.ArrayResult = Utils.listToJSONArray(list);
             result.Count = list.size();
-            if (jsCallback!=null) {
+            if (jsCallback != null) {
                 jsCallback.invoke(result.toMap());
             }
             if (droiError.isOk()) {

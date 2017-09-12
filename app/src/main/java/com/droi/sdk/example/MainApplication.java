@@ -10,6 +10,7 @@ import com.droi.sdk.core.DroiUser;
 import com.droi.sdk.example.adapter.ImageAdapter;
 import com.droi.sdk.extend.module.DroiWCloud;
 import com.droi.sdk.extend.module.DroiWCloudCache;
+import com.droi.sdk.extend.module.DroiWFile;
 import com.droi.sdk.extend.module.DroiWObject;
 import com.droi.sdk.extend.module.DroiWUser;
 import com.droi.sdk.extend.module.NativeLog;
@@ -36,6 +37,7 @@ public class MainApplication extends Application {
         try {
             WXSDKEngine.registerModule("droiobject", DroiWObject.class);
             WXSDKEngine.registerModule("droiuser", DroiWUser.class);
+            WXSDKEngine.registerModule("droifile", DroiWFile.class);
             WXSDKEngine.registerModule("droicloud", DroiWCloud.class);
             WXSDKEngine.registerModule("droicloudcache", DroiWCloudCache.class);
             WXSDKEngine.registerModule("nativelog", NativeLog.class);
