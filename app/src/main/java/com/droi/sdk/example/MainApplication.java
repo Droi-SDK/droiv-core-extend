@@ -12,6 +12,7 @@ import com.droi.sdk.extend.module.DroiWCloud;
 import com.droi.sdk.extend.module.DroiWCloudCache;
 import com.droi.sdk.extend.module.DroiWFile;
 import com.droi.sdk.extend.module.DroiWObject;
+import com.droi.sdk.extend.module.DroiWQuery;
 import com.droi.sdk.extend.module.DroiWUser;
 import com.droi.sdk.extend.module.NativeLog;
 import com.taobao.weex.InitConfig;
@@ -36,6 +37,7 @@ public class MainApplication extends Application {
         ).build());
         try {
             WXSDKEngine.registerModule("droiobject", DroiWObject.class);
+            WXSDKEngine.registerModule("droiquery", DroiWQuery.class);
             WXSDKEngine.registerModule("droiuser", DroiWUser.class);
             WXSDKEngine.registerModule("droifile", DroiWFile.class);
             WXSDKEngine.registerModule("droicloud", DroiWCloud.class);

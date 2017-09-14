@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class DroiResult {
 
-    public int Code;
+    public int Code = -1;
 
     public String StringResult;
 
