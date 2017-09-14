@@ -74,4 +74,27 @@ public class DroiWUser extends WXModule {
             }
         });
     }
+
+    @JSMethod()
+    public void getCurrentUser(JSCallback jsCallback) {
+        DroiUser droiUser = DroiUser.getCurrentUser();
+        DroiResult result = new DroiResult();
+        result.Code = 0;
+        JSONObject data;
+        JSONObject resultJSONObject = null;
+        try {
+            data = new JSONObject(droiUser.toString());
+            resultJSONObject = new JSONObject();
+            resultJSONObject.put("Data", data);
+            resultJSONObject.put("Token", droiUser.getSessionToken());
+            //resultJSONObject.put("ExpiredAt",droiUser.getExpiredAt());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            result.Result = resultJSONObject;
+            if (jsCallback != null) {
+                jsCallback.invoke(result.toMap());
+            }
+        }
+    }
 }
