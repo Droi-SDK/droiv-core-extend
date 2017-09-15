@@ -107,11 +107,17 @@ public class DroiWObject extends WXModule {
         DroiObject droiObject;
         DroiResult result = new DroiResult();
         List<DroiObject> list = query.runQuery(droiError);
-        if (droiError.isOk() && list.size() == 1) {
-            droiObject = list.get(0);
-            droiError = droiObject.delete();
+        if (droiError.isOk()) {
+            if (list.size() == 1) {
+                droiObject = list.get(0);
+                droiError = droiObject.delete();
+            } else {
+                droiError.setCode(1030301);
+            }
         }
         result.Code = droiError.getCode();
-        jsCallback.invoke(result.toMap());
+        if (jsCallback != null) {
+            jsCallback.invoke(result.toMap());
+        }
     }
 }

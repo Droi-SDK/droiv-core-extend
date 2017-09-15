@@ -45,19 +45,24 @@ public class DroiWFile extends WXModule {
         DroiFile droiFile;
         DroiResult result = new DroiResult();
         List<DroiFile> list = query.runQuery(droiError);
-        if (droiError.isOk() && list.size() == 1) {
-            droiFile = list.get(0);
-            File file = new File(filePath);
-            droiError = droiFile.update(file);
-            try {
-                result.Result = new JSONObject(droiFile.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (droiError.isOk()) {
+            if (list.size() == 1) {
+                droiFile = list.get(0);
+                File file = new File(filePath);
+                droiError = droiFile.update(file);
+                try {
+                    result.Result = new JSONObject(droiFile.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                droiError.setCode(1030301);
             }
         }
-        // TODO droiFile 没有查询到
         result.Code = droiError.getCode();
-        jsCallback.invoke(result.toMap());
+        if (jsCallback != null) {
+            jsCallback.invoke(result.toMap());
+        }
     }
 
     @JSMethod(uiThread = false)
@@ -68,12 +73,17 @@ public class DroiWFile extends WXModule {
         DroiFile droiFile;
         DroiResult result = new DroiResult();
         List<DroiFile> list = query.runQuery(droiError);
-        if (droiError.isOk() && list.size() == 1) {
-            droiFile = list.get(0);
-            droiError = droiFile.delete();
+        if (droiError.isOk()) {
+            if (list.size() == 1) {
+                droiFile = list.get(0);
+                droiError = droiFile.delete();
+            } else {
+                droiError.setCode(1030301);
+            }
         }
-        // TODO droiFile 没有查询到
         result.Code = droiError.getCode();
-        jsCallback.invoke(result.toMap());
+        if (jsCallback != null) {
+            jsCallback.invoke(result.toMap());
+        }
     }
 }
