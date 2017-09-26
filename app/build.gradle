@@ -16,14 +16,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk {
-                abiFilters "armeabi","x86"
+                abiFilters "armeabi", "x86"
             }
         }
-        debug{
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk {
-                abiFilters "armeabi","x86"
+                abiFilters "armeabi", "x86"
             }
         }
     }
@@ -54,11 +54,12 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.63.android'
     // dev-tool
     compile 'com.taobao.android:weex_inspector:0.12.1'
-//    compile 'com.squareup.okhttp:okhttp:3.4.1'
-//    compile 'com.squareup.okhttp:okhttp-ws:3.4.1'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-ws:2.3.0'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-//    compile 'com.facebook.fresco:fresco:1.5.0'
-    //compile 'com.facebook.fresco:animated-gif:0.12.0'
+
+    compile 'com.droi.sdk:Core:+'
+    compile 'com.droi.sdk:feedback:+'
+    compile 'weex-project:weex_sdk:0.13.1@aar'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
 }

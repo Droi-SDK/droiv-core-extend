@@ -4,6 +4,7 @@ import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiFile;
 import com.droi.sdk.core.DroiQuery;
+import com.droi.sdk.extend.LogUtil;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -27,14 +28,22 @@ public class DroiWFile extends WXModule {
         DroiError droiError = droiFile.save();
         DroiResult result = new DroiResult();
         result.Code = droiError.getCode();
-        if (droiError.isOk()) {
-            try {
+        try {
+            if (droiError.isOk()) {
                 result.Result = new JSONObject(droiFile.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (jsCallback != null) {
+                jsCallback.invoke(result.toMap());
+            }
+            if (droiError.isOk()) {
+                LogUtil.i("success");
+            } else {
+                LogUtil.e("failed:" + droiError.toString());
             }
         }
-        jsCallback.invoke(result.toMap());
     }
 
     @JSMethod(uiThread = false)
@@ -63,6 +72,11 @@ public class DroiWFile extends WXModule {
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
         }
+        if (droiError.isOk()) {
+            LogUtil.i("success");
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
+        }
     }
 
     @JSMethod(uiThread = false)
@@ -84,6 +98,11 @@ public class DroiWFile extends WXModule {
         result.Code = droiError.getCode();
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
+        }
+        if (droiError.isOk()) {
+            LogUtil.i("success");
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
         }
     }
 }

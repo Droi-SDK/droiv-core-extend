@@ -1,13 +1,12 @@
 package com.droi.sdk.extend.module;
 
-import android.util.Log;
-
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiFile;
 import com.droi.sdk.core.DroiObject;
 import com.droi.sdk.core.DroiQuery;
 import com.droi.sdk.core.DroiReferenceObject;
+import com.droi.sdk.extend.LogUtil;
 import com.droi.sdk.extend.Utils;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -37,23 +36,23 @@ public class DroiWObject extends WXModule {
                 result.Code = droiError.getCode();
                 result.Result = new JSONObject(droiObject.toString());
                 if (droiError.isOk()) {
-                    Log.i("chenpei", "成功:");
+                    LogUtil.i("success:" + droiObject.toString());
                 } else {
-                    Log.e("chenpei", "失败" + droiError.toString());
+                    LogUtil.e("failed:" + droiError.toString());
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        if (jsCallback != null) {
-            jsCallback.invoke(result.toMap());
+        }finally {
+            if (jsCallback != null) {
+                jsCallback.invoke(result.toMap());
+            }
         }
     }
 
     private static DroiObject droiObjectFromJson(String tableName, JSONObject json) {
         DroiObject object;
         try {
-            //String tableName = json.getString("_TableName");
             object = DroiObject.create(tableName);
             Iterator<String> keys = json.keys();
             while (keys.hasNext()) {
@@ -71,6 +70,7 @@ public class DroiWObject extends WXModule {
                                 referenceObject.setDroiObject(droiFile);
                                 break;
                             case "_User":
+                                // TODO: 2017/9/25
                                 break;
                             default:
                                 DroiObject droiObject = droiObjectFromJson(myTableName, jsonObject);
@@ -118,6 +118,11 @@ public class DroiWObject extends WXModule {
         result.Code = droiError.getCode();
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
+        }
+        if (droiError.isOk()) {
+            LogUtil.i("success");
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.droi.sdk.extend.module;
 
-import android.util.Log;
-
 import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiUser;
+import com.droi.sdk.extend.LogUtil;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -29,15 +28,8 @@ public class DroiWUser extends WXModule {
     @JSMethod(uiThread = false)
     public void loginOTP(String phoneNum, String otpType, String otp, JSCallback jsCallback) {
         DroiError droiError = new DroiError();
-        DroiUser.loginOTP(phoneNum, getOtpType(otpType), otp, droiError);
-        if (droiError.isOk()) {
-            Log.i("chenpei", "成功");
-        } else {
-            Log.e("chenpei", "失败" + droiError.toString());
-        }
+        DroiUser droiUser = DroiUser.loginOTP(phoneNum, getOtpType(otpType), otp, droiError);
         DroiResult result = new DroiResult();
-        result.Code = droiError.getCode();
-        DroiUser droiUser = DroiUser.getCurrentUser();
         result.Code = droiError.getCode();
         try {
             if (droiError.isOk()) {
@@ -50,9 +42,15 @@ public class DroiWUser extends WXModule {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        if (jsCallback != null) {
-            jsCallback.invoke(result.toMap());
+        } finally {
+            if (jsCallback != null) {
+                jsCallback.invoke(result.toMap());
+            }
+            if (droiError.isOk()) {
+                LogUtil.i("success:" + droiUser.toString());
+            } else {
+                LogUtil.e("failed:" + droiError.toString());
+            }
         }
     }
 
@@ -61,15 +59,15 @@ public class DroiWUser extends WXModule {
         DroiUser.requestOTPInBackground(phoneNum, getOtpType(otpType), new DroiCallback<Boolean>() {
             @Override
             public void result(Boolean aBoolean, DroiError droiError) {
-                if (droiError.isOk()) {
-                    Log.i("chenpei", "成功");
-                } else {
-                    Log.e("chenpei", "失败" + droiError.toString());
-                }
                 DroiResult result = new DroiResult();
                 result.Code = droiError.getCode();
                 if (jsCallback != null) {
                     jsCallback.invoke(result.toMap());
+                }
+                if (droiError.isOk()) {
+                    LogUtil.i("success");
+                } else {
+                    LogUtil.e("failed:" + droiError.toString());
                 }
             }
         });
@@ -94,6 +92,11 @@ public class DroiWUser extends WXModule {
             result.Result = resultJSONObject;
             if (jsCallback != null) {
                 jsCallback.invoke(result.toMap());
+            }
+            if (resultJSONObject != null) {
+                LogUtil.i("success:" + resultJSONObject);
+            } else {
+                LogUtil.e("failed");
             }
         }
     }

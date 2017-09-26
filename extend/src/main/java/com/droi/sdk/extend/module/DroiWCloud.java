@@ -2,6 +2,7 @@ package com.droi.sdk.extend.module;
 
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCloud;
+import com.droi.sdk.extend.LogUtil;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -54,8 +55,13 @@ public class DroiWCloud extends WXModule {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (jsCallback!=null) {
+        if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
+        }
+        if (droiError.isOk()) {
+            LogUtil.i("success:" + resultString);
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
         }
     }
 }

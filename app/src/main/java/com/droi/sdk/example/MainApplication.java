@@ -3,10 +3,8 @@ package com.droi.sdk.example;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.droi.sdk.core.Core;
-import com.droi.sdk.core.DroiUser;
 import com.droi.sdk.example.adapter.ImageAdapter;
 import com.droi.sdk.extend.module.DroiWCloud;
 import com.droi.sdk.extend.module.DroiWCloudCache;
@@ -30,11 +28,9 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Core.initialize(this);
-        DroiUser droiUser = DroiUser.getCurrentUser();
-        Log.i("chenpei", droiUser.toString());
         WXSDKEngine.initialize(this,
                 new InitConfig.Builder().setImgAdapter(new ImageAdapter()
-        ).build());
+                ).build());
         try {
             WXSDKEngine.registerModule("droiobject", DroiWObject.class);
             WXSDKEngine.registerModule("droiquery", DroiWQuery.class);

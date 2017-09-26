@@ -1,12 +1,12 @@
 package com.droi.sdk.extend.module;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCondition;
 import com.droi.sdk.core.DroiObject;
 import com.droi.sdk.core.DroiQuery;
+import com.droi.sdk.extend.LogUtil;
 import com.droi.sdk.extend.Utils;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -27,9 +27,9 @@ public class DroiWQuery extends WXModule {
 
     @JSMethod(uiThread = false)
     public void query(String tableName, String whereClause, String options, JSCallback jsCallback) {
-        Log.i("chenpei", "options:" + options);
-        Log.i("chenpei", "whereClause:" + whereClause);
-        Log.i("chenpei", "enter");
+        LogUtil.i("options:" + options);
+        LogUtil.i("whereClause:" + whereClause);
+        LogUtil.i("enter");
         DroiCondition cond = null;
         DroiQuery.Builder builder = DroiQuery.Builder.newBuilder().query(tableName);
         builder = parseOption(builder, options);
@@ -66,9 +66,9 @@ public class DroiWQuery extends WXModule {
                 jsCallback.invoke(result.toString());
             }
             if (droiError.isOk()) {
-                Log.i("chenpei", "size:" + count);
+                LogUtil.i("size:" + count);
             } else {
-                Log.e("chenpei", "失败" + droiError.toString());
+                LogUtil.e("failed:" + droiError.toString());
             }
         } else {
             DroiError droiError = new DroiError();
@@ -81,9 +81,9 @@ public class DroiWQuery extends WXModule {
                 jsCallback.invoke(result.toMap());
             }
             if (droiError.isOk()) {
-                Log.i("chenpei", list.toString());
+                LogUtil.i("success:" + list.toString());
             } else {
-                Log.e("chenpei", "失败" + droiError.toString());
+                LogUtil.e("failed:" + droiError.toString());
             }
         }
     }
@@ -123,7 +123,7 @@ public class DroiWQuery extends WXModule {
                         return cond;
                     }
                 } else {
-                    String value = object.optString(key);
+                    Object value = object.opt(key);
                     cond = DroiCondition.cond(key, "$eq", value);
                     return cond;
                 }

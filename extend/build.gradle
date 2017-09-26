@@ -30,11 +30,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:support-v4:26.+'
+    provided 'com.android.support:appcompat-v7:26.+'
+    provided 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.droi.sdk:Core:+'
-    compile 'weex-project:weex_sdk:0.13.1@aar'
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    provided 'com.droi.sdk:Core:+'
+    provided 'com.droi.sdk:feedback:+'
+    provided 'weex-project:weex_sdk:0.13.1@aar'
+    provided 'com.squareup.okhttp3:okhttp:3.8.0'
 }

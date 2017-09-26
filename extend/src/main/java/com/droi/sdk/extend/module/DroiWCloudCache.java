@@ -2,6 +2,7 @@ package com.droi.sdk.extend.module;
 
 import com.droi.sdk.DroiError;
 import com.droi.sdk.core.DroiCloudCache;
+import com.droi.sdk.extend.LogUtil;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -20,6 +21,11 @@ public class DroiWCloudCache extends WXModule {
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
         }
+        if (droiError.isOk()) {
+            LogUtil.i("success:" + value);
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
+        }
     }
 
     @JSMethod(uiThread = false)
@@ -32,6 +38,11 @@ public class DroiWCloudCache extends WXModule {
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
         }
+        if (droiError.isOk()) {
+            LogUtil.i("success:" + value);
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
+        }
     }
 
     @JSMethod(uiThread = false)
@@ -41,6 +52,11 @@ public class DroiWCloudCache extends WXModule {
         result.Code = droiError.getCode();
         if (jsCallback != null) {
             jsCallback.invoke(result.toMap());
+        }
+        if (droiError.isOk()) {
+            LogUtil.i("success");
+        } else {
+            LogUtil.e("failed:" + droiError.toString());
         }
     }
 }
